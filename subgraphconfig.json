@@ -1,0 +1,11 @@
+{
+  "output": "generated/",
+  "chain": "mainnet",
+  "datasources": [
+    {
+      "address": "0xa08126f5e1ed91a635987071e6ff5eb2aeb67c48",
+      "startBlock": 13200000,
+      "module": ["erc721", "ownable"]
+    }
+  ]
+}
