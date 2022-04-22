@@ -1,0 +1,20 @@
+{
+  orderApprovedPartOnes(first: 5) {
+    id
+    hash
+    exchange
+    maker
+  }
+  orderApprovedPartTwos(first: 5) {
+    id
+    hash
+    howToCall
+    calldata
+  }
+  OrdersMatched(first: 1) {
+    id
+    buyHash
+    sellHash
+    price
+  }
+}

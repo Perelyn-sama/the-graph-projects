@@ -1,0 +1,3 @@
+graph init --contract-name VendingMachine --index-events --studio --from-contract 0x4006c82FfB71933160948626dB3Ff8D8aaad6510 --network rinkeby vending
+
+graph init --contract-name WyvernExchange --index-events --studio --from-contract 0x7Be8076f4EA4A4AD08075C2508e481d6C946D12b --network mainnet opensea
