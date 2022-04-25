@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bignumber.js": "^9.0.2",
     "cors": "^2.8.5",
     "ethers": "^5.6.4",
     "express": "^4.17.3",

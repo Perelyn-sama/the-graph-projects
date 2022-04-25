@@ -3,6 +3,7 @@ const express = require("express");
 const Web3 = require("web3");
 const cors = require("cors");
 const BRLMasterChef = require("../abis/BRLMasterChef.json");
+const BigNumber = require("bignumber.js");
 
 require("dotenv").config(); // install me oooooooo
 // Get rpc url for aurora o
@@ -18,6 +19,30 @@ const getCurrentblock = async () => {
   // console.log(currentBlock);
 };
 
+async function getMultiplier() {
+  const network = process.env.AURORA_NETWORK;
+  const web3 = new Web3(new Web3.providers.HttpProvider(network));
+  const MyContract = new web3.eth.Contract(
+    BRLMasterChef,
+    "0x35cc71888dbb9ffb777337324a4a60fdbaa19dde"
+  );
+
+  let res = await MyContract.methods.getMultiplier(64271292, 64271293).call();
+  return res;
+}
+
+async function getBRLPerBlock() {
+  const network = process.env.AURORA_NETWORK;
+  const web3 = new Web3(new Web3.providers.HttpProvider(network));
+  const MyContract = new web3.eth.Contract(
+    BRLMasterChef,
+    "0x35cc71888dbb9ffb777337324a4a60fdbaa19dde"
+  );
+
+  let res = await MyContract.methods.BRLPerBlock().call();
+  return res;
+}
+
 async function main() {
   const BRL_CHEF_ADDR = "0x35CC71888DBb9FfB777337324a4A60fdBAA19DDE";
   const network = process.env.AURORA_NETWORK;
@@ -26,26 +51,17 @@ async function main() {
 
   const currentBlock = getCurrentblock();
 
-  const multiplier = instance.methods.getMultiplier(
-    currentBlock,
-    currentBlock + 1
-  );
+  const multiplier = getMultiplier();
 
-  // const rewardsPerWeek =
-  //   (((await instance.methods.BRLPerBlock()) / 1e18) * multiplier * 604800) /
-  //   1.1;
+  // const BRLPerBlock = getBRLPerBlock();
 
-  // console.log(rewardsPerWeek);
-  return instance.methods.owner().call();
+  // const rewardsPerWeek = ((BRLPerBlock / 1e18) * multiplier * 604800) / 1.1;
+
+  // console.log(BRLPerBlock);
+  // console.log(1e18);
+
+  // return rewardsPerWeek;
 }
 
-// console.log(main());
-const network = process.env.AURORA_NETWORK;
-
-const web3 = new Web3(new Web3.providers.HttpProvider(network));
-const MyContract = new web3.eth.Contract(
-  BRLMasterChef,
-  "0x35cc71888dbb9ffb777337324a4a60fdbaa19dde"
-);
-// console.log(MyContract.methods.getMultiplier(64271292, 64271293).call());
-console.log(MyContract.methods.getMultiplier(64271292, 64271293));
+main();
+getBRLPerBlock().then((res) => console.log(res));
