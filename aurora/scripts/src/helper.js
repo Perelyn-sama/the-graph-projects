@@ -49,19 +49,20 @@ async function main() {
   const web3 = new Web3(new Web3.providers.HttpProvider(network));
   const instance = new web3.eth.Contract(BRLMasterChef, BRL_CHEF_ADDR);
 
-  const currentBlock = getCurrentblock();
+  const currentBlock = await getCurrentblock();
 
-  const multiplier = getMultiplier();
+  const multiplier = await getMultiplier();
 
-  // const BRLPerBlock = getBRLPerBlock();
+  const BRLPerBlock = await getBRLPerBlock();
 
-  // const rewardsPerWeek = ((BRLPerBlock / 1e18) * multiplier * 604800) / 1.1;
+  // return BRLPerBlock;
+
+  const rewardsPerWeek = ((BRLPerBlock / 1e18) * multiplier * 604800) / 1.1;
 
   // console.log(BRLPerBlock);
   // console.log(1e18);
 
-  // return rewardsPerWeek;
+  return rewardsPerWeek;
 }
-
-main();
-getBRLPerBlock().then((res) => console.log(res));
+main().then((res) => console.log(res));
+// getBRLPerBlock().then((res) => console.log(res));
