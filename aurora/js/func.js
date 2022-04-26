@@ -141,3 +141,75 @@ async function loadAuroraChefContract(
   }
   return { prices, totalUserStaked, totalStaked, averageApr };
 }
+
+async function getAuroraToken(App, tokenAddress, stakingAddress) {
+  if (tokenAddress == "0x0000000000000000000000000000000000000000") {
+    return getAuroraErc20(App, null, tokenAddress, "");
+  }
+  const type = window.localStorage.getItem(tokenAddress);
+  if (type)
+    return getAuroraStoredToken(App, tokenAddress, stakingAddress, type);
+  try {
+    const crv = new ethcall.Contract(tokenAddress, CURVE_ABI);
+    const [minter] = await App.ethcallProvider.all([crv.minter()]);
+    const res = await getAuroraCurveToken(
+      App,
+      crv,
+      tokenAddress,
+      stakingAddress,
+      minter
+    );
+    window.localStorage.setItem(tokenAddress, "curve");
+    return res;
+  } catch (err) {}
+  try {
+    const stable = new ethcall.Contract(tokenAddress, STABLESWAP_ABI);
+    const _coin0 = await App.ethcallProvider.all([stable.coins(0)]);
+    window.localStorage.setItem(tokenAddress, "stableswap");
+    return await getAuroraStableswapToken(
+      App,
+      stable,
+      tokenAddress,
+      stakingAddress
+    );
+  } catch (err) {}
+  try {
+    const pool = new ethcall.Contract(tokenAddress, UNI_ABI);
+    const _token0 = await App.ethcallProvider.all([pool.token0()]);
+    const uniPool = await getAuroraUniPool(
+      App,
+      pool,
+      tokenAddress,
+      stakingAddress
+    );
+    window.localStorage.setItem(tokenAddress, "uniswap");
+    return uniPool;
+  } catch (err) {}
+  try {
+    const basicVault = new ethcall.Contract(tokenAddress, HARVEST_VAULT_ABI);
+    const _token = await App.ethcallProvider.all([basicVault.underlying()]);
+    const res = await getAuroraBasicVault(
+      App,
+      basicVault,
+      tokenAddress,
+      stakingAddress
+    );
+    window.localStorage.setItem(tokenAddress, "basicAuroraVault");
+    return res;
+  } catch (err) {}
+  try {
+    const erc20 = new ethcall.Contract(tokenAddress, ERC20_ABI);
+    const _name = await App.ethcallProvider.all([erc20.name()]);
+    const erc20tok = await getAuroraErc20(
+      App,
+      erc20,
+      tokenAddress,
+      stakingAddress
+    );
+    window.localStorage.setItem(tokenAddress, "erc20");
+    return erc20tok;
+  } catch (err) {
+    console.log(err);
+    console.log(`Couldn't match ${tokenAddress} to any known token type.`);
+  }
+}
