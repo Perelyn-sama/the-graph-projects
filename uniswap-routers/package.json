@@ -1,0 +1,16 @@
+{
+  "name": "uniswap-routers",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Perelyn-sama/uniswap-routers",
+    "create-local": "graph create --node http://localhost:8020/ Perelyn-sama/uniswap-routers",
+    "remove-local": "graph remove --node http://localhost:8020/ Perelyn-sama/uniswap-routers",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Perelyn-sama/uniswap-routers"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.29.0",
+    "@graphprotocol/graph-ts": "0.26.0"
+  }
+}

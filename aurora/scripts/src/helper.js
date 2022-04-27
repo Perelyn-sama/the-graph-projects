@@ -2,6 +2,7 @@ const Web3 = require("web3");
 const BRLMasterChef = require("../abis/BRLMasterChef.json");
 const BRLToken = require("../abis/BRLToken.json");
 const BigNumber = require("bignumber.js");
+const CoinGecko = require("coingecko-api");
 
 require("dotenv").config();
 
@@ -30,4 +31,19 @@ async function main() {
   console.log(other);
   return rewardsPerWeek;
 }
-main().then((res) => console.log(res));
+// main().then((res) => console.log(res));
+async function getPrice() {
+  const CoinGeckoClient = new CoinGecko();
+  let data = await CoinGeckoClient.exchanges.fetchTickers("bitfinex", {
+    coin_ids: ["borealis"],
+  });
+  var _coinList = {};
+  var _datacc = data.data.tickers.filter((t) => t.target == "USD");
+  ["BRL"].forEach((i) => {
+    var _temp = _datacc.filter((t) => t.base == i);
+    var _res = _temp.length == 0 ? [] : _temp[0];
+    _coinList[i] = _res.last;
+  });
+  console.log(_coinList);
+}
+getPrice();
