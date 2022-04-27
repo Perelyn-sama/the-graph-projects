@@ -57,3 +57,23 @@ type OwnershipTransferred @entity {
   previousOwner: Bytes! # address
   newOwner: Bytes! # address
 }
+
+type MarketPlace @entity {
+  name: String!
+  txNumber: BigInt!
+  volume1h: BigInt!
+  volume24h: BigInt!
+}
+
+type NftsTrade @entity {
+  marketplace: MarketPlace!
+  blockNumber: BigInt!
+  hash: BigInt!
+  collections: COLLECTION
+  id: ID!
+  addressFrom: Bytes!
+  addressTo: Bytes!
+  timeHeld: BigInt!
+  priceNative: BigInt!
+  priceUsd: BigInt!
+}
