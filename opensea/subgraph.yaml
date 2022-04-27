@@ -19,6 +19,8 @@ dataSources:
         - OrdersMatched
         - OwnershipRenounced
         - OwnershipTransferred
+        - NftsTrade
+        - MarketPlace
       abis:
         - name: WyvernExchange
           file: ./abis/WyvernExchange.json
